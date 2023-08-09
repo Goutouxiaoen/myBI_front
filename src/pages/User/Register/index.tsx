@@ -1,19 +1,18 @@
 import Footer from '@/components/Footer';
-import { listChartByPageUsingPOST } from '@/services/yubi/chartController';
-import { getLoginUserUsingGET, userLoginUsingPOST } from '@/services/yubi/userController';
+import { userRegisterUsingPOST } from '@/services/yubi/userController';
 import { Link } from '@@/exports';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { Helmet, history, useModel } from '@umijs/max';
+import { Helmet, history } from '@umijs/max';
 import { message, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { flushSync } from 'react-dom';
 import Settings from '../../../../config/defaultSettings';
 
-const Login: React.FC = () => {
+// @ts-ignore
+const Register: React.FC = () => {
   const [type, setType] = useState<string>('account');
-  const { setInitialState } = useModel('@@initialState');
+
   const containerClassName = useEmotionCss(() => {
     return {
       display: 'flex',
@@ -27,44 +26,29 @@ const Login: React.FC = () => {
   });
 
   useEffect(() => {
-    listChartByPageUsingPOST({}).then((res) => {
+    userRegisterUsingPOST({}).then((res) => {
       console.error('res', res);
     });
   });
 
-  /**
-   * 登陆成功后，获取用户登录信息
-   */
-  const fetchUserInfo = async () => {
-    const userInfo = await getLoginUserUsingGET();
-    if (userInfo) {
-      flushSync(() => {
-        // @ts-ignore
-        setInitialState((s) => ({
-          ...s,
-          currentUser: userInfo,
-        }));
-      });
+  const handleSubmit = async (values: API.UserRegisterRequest) => {
+    const { userPassword, checkPassword } = values;
+    if (userPassword !== checkPassword) {
+      message.error('两次输入的密码不一致');
     }
-  };
-
-  const handleSubmit = async (values: API.UserLoginRequest) => {
     try {
-      // 登录
-      const res = await userLoginUsingPOST(values);
-      if (res.code === 0) {
-        const defaultLoginSuccessMessage = '登录成功！';
+      // 注册
+      const id = await userRegisterUsingPOST(values);
+      if (id) {
+        const defaultLoginSuccessMessage = '注册成功';
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
+
         const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
+        history.push(urlParams.get('redirect') || '/user/login');
         return;
-      } else {
-        message.error(res.message);
       }
     } catch (error) {
-      const defaultLoginFailureMessage = '登录失败，请重试！';
-      console.log(error);
+      const defaultLoginFailureMessage = '注册失败，请重试！';
       message.error(defaultLoginFailureMessage);
     }
   };
@@ -72,7 +56,7 @@ const Login: React.FC = () => {
     <div className={containerClassName}>
       <Helmet>
         <title>
-          {'登录'}- {Settings.title}
+          {'注册'}- {Settings.title}
         </title>
       </Helmet>
       <div
@@ -88,11 +72,6 @@ const Login: React.FC = () => {
           }}
           logo={<img alt="logo" src="/logo.svg" />}
           title="AI数据可视化分析平台"
-          subTitle={
-            <a href="https://yupi.icu" target="_blank" rel="noreferrer">
-              让数据分析变得更简单
-            </a>
-          }
           onFinish={async (values) => {
             await handleSubmit(values as API.UserLoginRequest);
           }}
@@ -104,7 +83,7 @@ const Login: React.FC = () => {
             items={[
               {
                 key: 'account',
-                label: '账户密码登录',
+                label: '注册',
               },
             ]}
           />
@@ -122,6 +101,11 @@ const Login: React.FC = () => {
                     required: true,
                     message: '用户名是必填项！',
                   },
+                  {
+                    min: 4,
+                    type: 'string',
+                    message: '账户名称过短',
+                  },
                 ]}
               />
               <ProFormText.Password
@@ -136,6 +120,31 @@ const Login: React.FC = () => {
                     required: true,
                     message: '密码是必填项！',
                   },
+                  {
+                    min: 8,
+                    type: 'string',
+                    message: '长度不能小于8',
+                  },
+                ]}
+              />
+
+              <ProFormText.Password
+                name="checkPassword"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <LockOutlined />,
+                }}
+                placeholder={'请输入确认密码'}
+                rules={[
+                  {
+                    required: true,
+                    message: '密码是必填项！',
+                  },
+                  {
+                    min: 8,
+                    type: 'string',
+                    message: '长度不能小于8',
+                  },
                 ]}
               />
             </>
@@ -145,7 +154,7 @@ const Login: React.FC = () => {
               marginBottom: 24,
             }}
           >
-            <Link to="/user/register">注册</Link>
+            <Link to="/user/login">登录</Link>
           </div>
         </LoginForm>
       </div>
@@ -153,4 +162,4 @@ const Login: React.FC = () => {
     </div>
   );
 };
-export default Login;
+export default Register;

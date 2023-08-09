@@ -3,7 +3,7 @@ import { DefaultFooter } from '@ant-design/pro-components';
 import '@umijs/max';
 import React from 'react';
 const Footer: React.FC = () => {
-  const defaultMessage = '编程导航知识星球出品';
+  const defaultMessage = '@版权：狗头肖恩';
   const currentYear = new Date().getFullYear();
   return (
     <DefaultFooter
@@ -13,8 +13,8 @@ const Footer: React.FC = () => {
       copyright={`${currentYear} ${defaultMessage}`}
       links={[
         {
-          key: '鱼智能 BI',
-          title: '鱼智能 BI',
+          key: 'AI数据可视化分析平台',
+          title: 'AI数据可视化分析平台',
           href: 'https://pro.ant.design',
           blankTarget: true,
         },
@@ -24,12 +24,12 @@ const Footer: React.FC = () => {
           href: 'https://github.com/ant-design/ant-design-pro',
           blankTarget: true,
         },
-        {
-          key: '鱼智能 BI',
-          title: '鱼智能 BI',
-          href: 'https://ant.design',
-          blankTarget: true,
-        },
+        // {
+        //   key: 'AI数据可视化分析平台',
+        //   title: 'AI数据可视化分析平台',
+        //   href: 'https://ant.design',
+        //   blankTarget: true,
+        // },
       ]}
     />
   );

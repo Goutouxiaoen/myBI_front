@@ -134,7 +134,7 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    userId?: number;
+    userId?: string;
   };
 
   type ChartUpdateRequest = {
@@ -148,16 +148,11 @@ declare namespace API {
     isDelete?: number;
     name?: string;
     updateTime?: string;
+    userId?: number;
   };
 
   type DeleteRequest = {
     id?: number;
-  };
-
-  type genChartByAiAsyncMqUsingPOSTParams = {
-    chartType?: string;
-    goal?: string;
-    name?: string;
   };
 
   type genChartByAiAsyncUsingPOSTParams = {
@@ -172,7 +167,7 @@ declare namespace API {
     name?: string;
   };
 
-  type getChartByIdUsingGETParams = {
+  type getChartVOByIdUsingGETParams = {
     /** id */
     id?: number;
   };

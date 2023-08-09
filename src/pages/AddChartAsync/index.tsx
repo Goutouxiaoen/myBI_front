@@ -70,9 +70,11 @@ const AddChartAsync: React.FC = () => {
               options={[
                 { value: '折线图', label: '折线图' },
                 { value: '柱状图', label: '柱状图' },
-                { value: '堆叠图', label: '堆叠图' },
-                { value: '饼图', label: '饼图' },
+                { value: '饼状图', label: '饼状图' },
                 { value: '雷达图', label: '雷达图' },
+                { value: '散点图', label: '散点图' },
+                { value: '面积堆积图', label: '面积堆积图' },
+                { value: '条形堆积图', label: '条形堆积图' },
               ]}
             />
           </Form.Item>
