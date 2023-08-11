@@ -1,12 +1,14 @@
 import Footer from '@/components/Footer';
 import { userRegisterUsingPOST } from '@/services/yubi/userController';
+// @ts-ignore
 import { Link } from '@@/exports';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
+// @ts-ignore
 import { Helmet, history } from '@umijs/max';
 import { message, Tabs } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Settings from '../../../../config/defaultSettings';
 
 // @ts-ignore
@@ -25,31 +27,35 @@ const Register: React.FC = () => {
     };
   });
 
-  useEffect(() => {
-    userRegisterUsingPOST({}).then((res) => {
-      console.error('res', res);
-    });
-  });
+  // useEffect(() => {
+  //   userRegisterUsingPOST({}).then((res) => {
+  //     console.error('res', res);
+  //   });
+  // });
 
   const handleSubmit = async (values: API.UserRegisterRequest) => {
     const { userPassword, checkPassword } = values;
     if (userPassword !== checkPassword) {
       message.error('两次输入的密码不一致');
+      return;
     }
     try {
       // 注册
-      const id = await userRegisterUsingPOST(values);
-      if (id) {
-        const defaultLoginSuccessMessage = '注册成功';
-        message.success(defaultLoginSuccessMessage);
+      const res = await userRegisterUsingPOST(values);
+      if (res.code === 0) {
+        const defaultRegisterFailureMessage = '注册成功';
+        message.success(defaultRegisterFailureMessage);
 
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/user/login');
         return;
+      } else {
+        const defaultRegisterFailureMessage = '该账号已注册！';
+        message.error(defaultRegisterFailureMessage);
       }
-    } catch (error) {
-      const defaultLoginFailureMessage = '注册失败，请重试！';
-      message.error(defaultLoginFailureMessage);
+    } catch (error: any) {
+      const defaultRegisterFailureMessage = '注册失败，请重试！';
+      message.error(defaultRegisterFailureMessage);
     }
   };
   return (
@@ -73,7 +79,12 @@ const Register: React.FC = () => {
           logo={<img alt="logo" src="/logo.svg" />}
           title="AI数据可视化分析平台"
           onFinish={async (values) => {
-            await handleSubmit(values as API.UserLoginRequest);
+            await handleSubmit(values as API.UserRegisterRequest);
+          }}
+          submitter={{
+            searchConfig: {
+              submitText: '注册', // 修改这里的文本为您想要的文本
+            },
           }}
         >
           <Tabs

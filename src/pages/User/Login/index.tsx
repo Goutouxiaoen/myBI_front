@@ -1,10 +1,12 @@
 import Footer from '@/components/Footer';
 import { listChartByPageUsingPOST } from '@/services/yubi/chartController';
 import { getLoginUserUsingGET, userLoginUsingPOST } from '@/services/yubi/userController';
+// @ts-ignore
 import { Link } from '@@/exports';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
+// @ts-ignore
 import { Helmet, history, useModel } from '@umijs/max';
 import { message, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -88,11 +90,11 @@ const Login: React.FC = () => {
           }}
           logo={<img alt="logo" src="/logo.svg" />}
           title="AI数据可视化分析平台"
-          subTitle={
-            <a href="https://yupi.icu" target="_blank" rel="noreferrer">
-              让数据分析变得更简单
-            </a>
-          }
+          // subTitle={
+          //   <a href="https://yupi.icu" target="_blank" rel="noreferrer">
+          //     让数据分析变得更简单
+          //   </a>
+          // }
           onFinish={async (values) => {
             await handleSubmit(values as API.UserLoginRequest);
           }}

@@ -8,6 +8,7 @@ import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDrop
 import { errorConfig } from './requestConfig';
 
 const isDev = process.env.NODE_ENV === 'development';
+
 const loginPath = '/user/login';
 
 /**
@@ -38,8 +39,8 @@ export async function getInitialState(): Promise<{
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
+// @ts-ignore
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
-  // @ts-ignore
   // @ts-ignore
   return {
     actionsRender: () => [<Question key="doc" />],

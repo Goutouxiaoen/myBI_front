@@ -1,5 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
+// @ts-ignore
 import { request } from '@umijs/max';
 
 /** add GET /api/queue/add */
